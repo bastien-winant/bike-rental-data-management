@@ -1,5 +1,5 @@
 import pandas as pd
-from src.utils import read_raw_file, save_processed_file, get_data_path, get_project_root
+from src.process_utils import read_raw_file, save_processed_file, get_project_root, clear_data_folder
 import re
 import os
 
@@ -67,6 +67,9 @@ def transform_weather_data():
 
 
 if __name__ == "__main__":
+	
+	clear_data_folder('processed')
+
 	raw_data_path = get_project_root() / 'data' / 'raw'
 
 	for filename in os.listdir(raw_data_path):

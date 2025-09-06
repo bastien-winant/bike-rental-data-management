@@ -1,5 +1,6 @@
 from pathlib import Path
 import pandas as pd
+import os
 
 
 def get_project_root() -> Path:
@@ -41,3 +42,10 @@ def save_processed_file(df: pd.DataFrame, filename: str, append: bool = False):
 	file_path = get_data_path(subdir='processed', filename=filename)
 	mode = 'a' if append else 'w'
 	df.to_csv(file_path, index=False, mode=mode)
+
+
+def clear_data_folder(sub_folder):
+	path = get_project_root() / 'data' / sub_folder
+
+	for file in os.listdir(path):
+		os.remove(path / file)
