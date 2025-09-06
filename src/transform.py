@@ -1,9 +1,11 @@
 import pandas as pd
-from src.utils import read_raw_file, save_processed_file
+from src.utils import read_raw_file, save_processed_file, get_data_path, get_project_root
+import re
+import os
 
 
-def transform_rides_data():
-	df = read_raw_file("JC-201605-citibike-tripdata.csv")
+def transform_rides_data(filename):
+	df = read_raw_file(filename)
 
 	df['Start Time'] = pd.to_datetime(df['Start Time'])
 	df['Stop Time'] = pd.to_datetime(df['Stop Time'])
@@ -31,8 +33,20 @@ def transform_rides_data():
 				'End Station Longitude': 'Longitude'
 		}, axis=1)
 
-	df_stations = pd.concat([df_start_stations, df_end_stations], ignore_index=True)
-	save_processed_file(df_stations, 'bike_stations.csv')
+	df_stations = pd.concat([df_start_stations, df_end_stations]).drop_duplicates(ignore_index=True)
+	save_processed_file(df_stations, 'bike_stations.csv', True)
+
+	df.drop(['Start Station Name', 'Start Station Latitude', 'Start Station Longitude',
+					 'End Station Name', 'End Station Latitude', 'End Station Longitude'], axis=1, inplace=True)
+
+	df['Birth Year'] = df['Birth Year'].fillna(-999).astype(int).replace(-999, None)
+
+	try:
+		m = re.search(r"[0-9]{6}", filename)
+		file_month = m.group()
+		save_processed_file(df, f'{file_month}_rides.csv')
+	except AttributeError:
+		print("File name should be in the format: JS-<yyyymm>-citibike-tripdata.csv")
 
 
 def transform_weather_data():
@@ -53,4 +67,12 @@ def transform_weather_data():
 
 
 if __name__ == "__main__":
+	raw_data_path = get_project_root() / 'data' / 'raw'
+
+	for filename in os.listdir(raw_data_path):
+		m = re.match(r'^JC-(\d){6}-citibike-tripdata.csv$', filename)
+		if m:
+			filename = m.group()
+			transform_rides_data(filename=filename)
+
 	transform_weather_data()

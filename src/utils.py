@@ -30,12 +30,14 @@ def read_raw_file(filename: str) -> pd.DataFrame:
 	return df
 
 
-def save_processed_file(df: pd.DataFrame, filename: str):
+def save_processed_file(df: pd.DataFrame, filename: str, append: bool = False):
 	"""
 	Save a Pandas DataFrame as CSV to the data/processed/ directory
 	:param df: Pandas DataFrame
 	:param filename: name of the data file
+	:param append: whether to write in append mode
 	:return:
 	"""
 	file_path = get_data_path(subdir='processed', filename=filename)
-	df.to_csv(file_path, index=False)
+	mode = 'a' if append else 'w'
+	df.to_csv(file_path, index=False, mode=mode)
