@@ -7,10 +7,14 @@ import os
 def transform_rides_data(filename):
 	df = read_raw_file(filename)
 
+	# convert columns to datetime type
 	df['Start Time'] = pd.to_datetime(df['Start Time'])
 	df['Stop Time'] = pd.to_datetime(df['Stop Time'])
+
+	# remove calculated field
 	df.drop('Trip Duration', axis=1, inplace=True)
 
+	# decompose stations data
 	df_start_stations = df[
 		['Start Station ID', 'Start Station Name', 'Start Station Latitude', 'Start Station Longitude']]\
 		.drop_duplicates()\
@@ -39,6 +43,7 @@ def transform_rides_data(filename):
 	df.drop(['Start Station Name', 'Start Station Latitude', 'Start Station Longitude',
 					 'End Station Name', 'End Station Latitude', 'End Station Longitude'], axis=1, inplace=True)
 
+	# convert to integer
 	df['Birth Year'] = df['Birth Year'].fillna(-999).astype(int).replace(-999, None)
 
 	try:
@@ -59,6 +64,7 @@ def transform_weather_data():
 	# convert date strings to datetime objects
 	df.DATE = pd.to_datetime(df.DATE)
 
+	# decompose station data
 	df_station = df[['STATION', 'NAME']].drop_duplicates(ignore_index=True)
 	save_processed_file(df_station, 'weather_stations.csv')
 
@@ -67,15 +73,16 @@ def transform_weather_data():
 
 
 if __name__ == "__main__":
-	
+	# clear the processed data folder
 	clear_data_folder('processed')
 
+	# transform rides data
 	raw_data_path = get_project_root() / 'data' / 'raw'
-
 	for filename in os.listdir(raw_data_path):
 		m = re.match(r'^JC-(\d){6}-citibike-tripdata.csv$', filename)
 		if m:
 			filename = m.group()
 			transform_rides_data(filename=filename)
 
+	# transform weather data
 	transform_weather_data()
