@@ -31,6 +31,18 @@ def read_raw_file(filename: str) -> pd.DataFrame:
 	return df
 
 
+def read_processed_file(filename: str) -> pd.DataFrame:
+	"""
+	Read in a file in the data/processed/ directory as a Pandas Dataframe
+	:param filename: name of the data file
+	:return: Pandas Dataframe
+	"""
+	file_path = get_data_path(subdir='processed', filename=filename)
+	df = pd.read_csv(file_path)
+
+	return df
+
+
 def save_processed_file(df: pd.DataFrame, filename: str, append: bool = False):
 	"""
 	Save a Pandas DataFrame as CSV to the data/processed/ directory
