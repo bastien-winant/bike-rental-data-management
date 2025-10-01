@@ -6,11 +6,11 @@ gateways:
       # https://sqlmesh.readthedocs.io/en/stable/reference/configuration/#connection
       # https://sqlmesh.readthedocs.io/en/stable/integrations/engines/postgres/#connection-options
       type: postgres
-      host: 
-      user: 
-      password: 
-      port: 
-      database: 
+      host: localhost
+      user: bastienwinant
+      password: ""
+      port: 5432
+      database: citibike_rides_analytics
       # concurrent_tasks: 4
       # register_comments: True
       # pre_ping: True
