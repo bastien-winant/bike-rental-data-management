@@ -1,3 +1,9 @@
+# stop the default server
 sudo -u postgres pg_ctl stop -D /Library/PostgreSQL/17/data
+
+# start the dedicated cluster
 pg_ctl -D citibike_rental_analytics -l logfile start
 postgres -D ~/Desktop/projects/bike-rental-data-management/citibike_rental_analytics > ~/Desktop/projects/bike-rental-data-management/citibike_rental_analytics/logfile 2>&1 &
+
+# stop the cluster
+pg_ctl -D ~/Desktop/projects/bike-rental-data-management/citibike_rental_analytics stop
