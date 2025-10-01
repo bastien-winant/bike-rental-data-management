@@ -1,0 +1,3 @@
+sudo -u postgres pg_ctl stop -D /Library/PostgreSQL/17/data
+pg_ctl -D citibike_rental_analytics -l logfile start
+postgres -D ~/Desktop/projects/bike-rental-data-management/citibike_rental_analytics > ~/Desktop/projects/bike-rental-data-management/citibike_rental_analytics/logfile 2>&1 &
