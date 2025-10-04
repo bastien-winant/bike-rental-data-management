@@ -13,6 +13,10 @@ The data for this project includes millions of bike trip records with start and 
 and rider types. It is sourced from Citi Bike's [Data Portal](https://citibikenyc.com/system-data) data portal in
 the form of monthly CSV files
 
+The main dataset for this project was sourced from Citi Bike's [Data Portal](https://citibikenyc.com/system-data).
+In total, it includes millions of trip records with start and end times, station locations, bike IDs, and rider types,
+as well as current station and bike availability. For the purposes of this project, 
+
 ## Approach
 ### Why PostgreSQL
 ### Data Modeling
