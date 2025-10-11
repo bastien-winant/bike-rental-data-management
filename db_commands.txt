@@ -1,5 +1,5 @@
 # stop the default server
-sudo -u postgres pg_ctl stop -D /Library/PostgreSQL/17/data
+sudo -u postgres pg_ctl stop -D /Library/PostgreSQL/18/data
 
 # start the dedicated cluster
 pg_ctl -D citibike_rental_analytics -l logfile start

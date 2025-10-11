@@ -1,10 +1,9 @@
 import argparse
-import typing as t
 from datetime import datetime, timedelta
 from utils import *
 import psycopg
 import pandas as pd
-from sqlmesh.utils.date import to_datetime, to_ds
+from sqlmesh.utils.date import to_datetime
 
 DB_NAME = "citibike_rides_analytics"
 DB_USER = "bastienwinant"
@@ -91,5 +90,5 @@ def parse_arguments() -> dict[str, str]:
 
 
 if __name__ == "__main__":
-	args: dict[str, t.Any] = parse_arguments()
+	args = parse_arguments()
 	add_raw_data(**args)
