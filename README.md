@@ -25,13 +25,17 @@ For this project, only files for the year 2016 were used.
 ### Weather Metrics
 Weather data is sourced from the [Global Historical Climatology Network daily](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily),
 a database of daily climate summaries from land surface stations across the globe.
-
-It provides daily measurements related to temperature, precipitations, and wind speed.
-For this project, we use the 2016 data recorded from the Newark Airport station.
+It provides daily measurements related to temperature, precipitations, and wind speed. For this project,
+I use the 2016 data recorded from the Newark Airport station.
 
 ## Approach
 ### Data Ingestion
+I created a custom Python script for reading the raw files and loading the data into the PostgreSQL database.
+The script allows for reading and processing selected ranges using command line arguments.
 
+TODO: add image of command line script being called
+
+The structure of the script was adapted from an [SQLMesh example project](https://github.com/TobikoData/sqlmesh-examples/blob/main/001_sushi/2_moderate/addsushidata.py).
 
 ### Data Modeling
 #### Staging Layer
