@@ -18,7 +18,7 @@ WITH route_ride_durations AS (
 		stop_station_id,
 		EXTRACT(MINUTE FROM stop_time - start_time) * 60 +
 			EXTRACT(SECOND FROM stop_time - start_time) AS duration_seconds
-	FROM core.fct_rides),
+	FROM core.rides),
 route_ride_stats AS (
 	SELECT
 		date,
@@ -43,9 +43,9 @@ SELECT
 	w.snowfall_mm,
 	w.snow_depth_mm
 FROM route_ride_stats r
-JOIN core.fct_weather w
+JOIN core.weather_metrics w
 USING (date)
-JOIN core.dim_citibike_stations start
+JOIN core.citibike_stations start
 ON r.start_station_id = start.id
-JOIN core.dim_citibike_stations stop
+JOIN core.citibike_stations stop
 ON r.stop_station_id = stop.id;

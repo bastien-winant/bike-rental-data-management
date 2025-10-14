@@ -1,5 +1,5 @@
 MODEL (
-	name core.fct_rides,
+	name core.rides,
   kind INCREMENTAL_BY_TIME_RANGE (
 		time_column start_time
   ),

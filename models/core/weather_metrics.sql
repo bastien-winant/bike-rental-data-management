@@ -1,5 +1,5 @@
 MODEL (
-	name core.fct_weather,
+	name core.weather_metrics,
 	kind INCREMENTAL_BY_TIME_RANGE (
 		time_column date
 	),

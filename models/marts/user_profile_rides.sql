@@ -15,7 +15,7 @@ WITH user_profile_rides AS (
 		gender,
 		EXTRACT(MINUTE FROM stop_time - start_time) * 60 +
 			EXTRACT(SECOND FROM stop_time - start_time) AS duration_seconds
-	FROM core.fct_rides)
+	FROM core.rides)
 SELECT
 	date,
 	user_type,

@@ -1,5 +1,5 @@
 MODEL (
-	name core.dim_weather_stations,
+	name core.weather_stations,
 	kind INCREMENTAL_BY_UNIQUE_KEY (
       unique_key id
 	),

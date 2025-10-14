@@ -1,5 +1,5 @@
 MODEL (
-	name core.dim_citibike_stations,
+	name core.citibike_stations,
 	kind INCREMENTAL_BY_UNIQUE_KEY (
 		unique_key id
 	),
