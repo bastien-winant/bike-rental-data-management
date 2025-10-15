@@ -4,10 +4,14 @@ from utils import *
 import psycopg
 import pandas as pd
 from sqlmesh.utils.date import to_datetime
+import logging
 
 DB_NAME = "citibike_rides_analytics"
 DB_USER = "bastienwinant"
 RAW_SCHEMA = "raw"
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='load_data.log', level=logging.INFO)
 
 def add_raw_data(
 		start: str,
@@ -20,6 +24,8 @@ def add_raw_data(
 	"""
 	Ingest raw data and add it to the Postgres database.
 	"""
+	logger.info('Started')
+
 	start_dt = to_datetime(start).date()
 	end_dt = to_datetime(end).date() if end else start_dt
 
@@ -31,6 +37,8 @@ def add_raw_data(
 
 			add_weather_data(cur=cur, start=start_dt, end=end_dt)
 			add_rides_data(cur=cur, start=start_dt, end=end_dt)
+
+	logger.info('Finished')
 	return
 
 def add_weather_data(cur: psycopg.Cursor, start: datetime.date, end: datetime.date) -> None:
@@ -49,6 +57,7 @@ def add_weather_data(cur: psycopg.Cursor, start: datetime.date, end: datetime.da
 	df.WDF5 = df.WDF5.fillna(-1).astype(int).replace(-1, None)
 
 	insert_table_values(cur, 'weather_metrics', df)
+	logger.info('Uploaded weather data')
 
 
 def add_rides_data(cur: psycopg.Cursor, start: datetime.date, end: datetime.date) -> None:
@@ -78,6 +87,7 @@ def add_rides_data(cur: psycopg.Cursor, start: datetime.date, end: datetime.date
 	df['Birth Year'] = df['Birth Year'].fillna(-1).astype(int).replace(-1, None)
 
 	insert_table_values(cur, 'citibike_rides', df)
+	logger.info('Uploaded rides data')
 
 def parse_arguments() -> dict[str, str]:
 	parser = argparse.ArgumentParser(description="Add data to the Citibike rides database.")
