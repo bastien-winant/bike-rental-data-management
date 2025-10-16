@@ -16,7 +16,6 @@ logging.basicConfig(filename='load_data.log', level=logging.INFO)
 def add_raw_data(
 		start: str,
     end: str = None,
-    reset: bool = False,
 		raw_schema: str = RAW_SCHEMA,
 		db_name: str = DB_NAME,
 		db_user: str = DB_USER

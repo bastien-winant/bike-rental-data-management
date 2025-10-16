@@ -31,9 +31,10 @@ I use the 2016 data recorded from the Newark Airport station.
 ## Approach
 ### Data Ingestion
 I created a custom Python script for reading the raw files and loading the data into the PostgreSQL database.
-The script allows for reading and processing selected ranges using command line arguments.
+The script supports dynamic date-range selection via command-line arguments, and integrates with SQLMesh’s incremental
+models used in downstream transformations.
 
-TODO: add image of command line script being called
+`python load_data.py --start 2016-01-01 --end 2016-06-01`
 
 The structure of the script was adapted from an [SQLMesh example project](https://github.com/TobikoData/sqlmesh-examples/blob/main/001_sushi/2_moderate/addsushidata.py).
 
@@ -57,8 +58,25 @@ The core layer acts as a single source of truth for the data by providing logica
 The data marts is denormalised and aimed at answering business questions.
 
 ### Orchestration
-## Decision and Roadblocks
+#### Incremental Model
+SQLMesh defines different _kinds_ of models, which determine how data is updated. In the staging and core layers of
+my pipeline, I make use of the powerful `INCREMENTAL_BY_TIME_RANGE` model.
+
+The `INCREMENTAL_BY_TIME_RANGE` model processes data in time windows, automatically tracking which periods have already
+been run so only new or updated time ranges are processed in future runs. In our case, new ride records are appended
+to the existing data at every pipeline run. SQLMesh keep tracks of which time window was most recently processed,
+and automatically process the next one in the sequence.
+
+This way the entire dataset is not entirely reprocessed each time, which saves compute costs and increases performance of our pipeline.
+While this isn’t necessary for the small dataset used in this project, it would be important when processing years worth of bike rental data.
+
 ## Next Steps
+The logical next step in this project is to orchestrate the data pipeline and periodically refresh the data.
+Data engineering projects derive much of their value from delivering fresh and timely data without manual intervention. 
+
+Using a dedicated orchestration tool like Airflow would allow me to manage the dependency of the SQLMesh pipeline on
+the custom data upload script.
+
 ## Who am I?
 I am Computer Science student at University of London (Goldsmiths) with a focus on data science.
 I have a particular interest for data engineering and business analytics.

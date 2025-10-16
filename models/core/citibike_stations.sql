@@ -3,7 +3,7 @@ MODEL (
 	kind INCREMENTAL_BY_UNIQUE_KEY (
 		unique_key id
 	),
-	cron "@daily",
+	cron "@monthly",
 	start "2016-01-01",
 	audits (
 		not_null(columns := (id, name)),

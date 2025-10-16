@@ -3,7 +3,7 @@ MODEL (
   kind INCREMENTAL_BY_TIME_RANGE (
 		time_column start_time
   ),
-  cron "@daily",
+  cron "@monthly",
   start "2016-01-01",
 	audits (
 		not_null(columns := (start_time, bike_id)),

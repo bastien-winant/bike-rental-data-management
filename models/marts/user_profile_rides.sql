@@ -1,9 +1,7 @@
 MODEL (
 	name marts.user_profile_rides,
-	kind INCREMENTAL_BY_TIME_RANGE (
-		time_column date
-	),
-	cron "@daily",
+	kind VIEW,
+	cron "@monthly",
 	start "2016-01-01"
 );
 
