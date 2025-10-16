@@ -93,7 +93,6 @@ def parse_arguments() -> dict[str, str]:
 
 	parser.add_argument("--start", help="First day to add data for")
 	parser.add_argument("--end", help="Last day to add data for")
-	parser.add_argument("--reset", help="Reset database to initial state", action="store_true")
 
 	return vars(parser.parse_args())
 

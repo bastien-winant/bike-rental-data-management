@@ -14,7 +14,7 @@ WITH with_age AS (
         DATE_TRUNC('DAY', start_time)::DATE AS date,
         DATE_PART('YEAR', start_time) - birth_year AS age,
         *
-    FROM core__dev.rides
+    FROM core.rides
 ),
 daily_aggregates AS (
     SELECT
