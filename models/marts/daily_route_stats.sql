@@ -1,12 +1,14 @@
 MODEL (
-	name marts.daily_route_stats,
-	kind VIEW,
-	cron "@monthly",
-	start "2016-01-01",
-	audits (
-		unique_combination_of_columns(columns := (date, start_station, stop_station))
-	),
-  grain (date, start_station, stop_station)
+    name marts.daily_route_stats,
+    kind INCREMENTAL_BY_TIME_RANGE (
+        time_column date
+    ),
+    start "2016-01-01",
+    cron "@daily",
+    grain (date, start_station, stop_station),
+    audits (
+        unique_combination_of_columns(columns := (date, start_station, stop_station))
+    )
 );
 
 WITH daily_ride_stats AS (
@@ -19,6 +21,7 @@ WITH daily_ride_stats AS (
             EXTRACT(SECOND FROM stop_time - start_time)
         ) AS total_duration_seconds
     FROM core.rides
+    WHERE DATE_TRUNC('DAY', start_time) BETWEEN @start_date AND @end_date
     GROUP BY 1, 2, 3
 )
 SELECT

@@ -1,12 +1,14 @@
 MODEL (
-	name marts.daily_user_stats,
-	kind VIEW,
-	cron "@monthly",
-	start "2016-01-01",
-	audits (
-		unique_combination_of_columns(columns := (date, age_group, gender, user_type))
-	),
-  grain (date, age_group, gender, user_type)
+    name marts.daily_user_stats,
+    kind INCREMENTAL_BY_TIME_RANGE (
+        time_column date
+    ),
+    start "2016-01-01",
+    cron "@daily",
+    grain (date, age_group, gender, user_type),
+    audits (
+        unique_combination_of_columns(columns := (date, age_group, gender, user_type))
+    )
 );
 
 WITH with_age AS (
@@ -15,6 +17,7 @@ WITH with_age AS (
         DATE_PART('YEAR', start_time) - birth_year AS age,
         *
     FROM core.rides
+    WHERE DATE_TRUNC('DAY', start_time) BETWEEN @start_date AND @end_date
 ),
 daily_aggregates AS (
     SELECT

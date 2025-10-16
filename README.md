@@ -55,7 +55,11 @@ Given that input data, this step mostly consists in separating station info from
 The core layer acts as a single source of truth for the data by providing logically consistent, cleansed, and normalized tables.
 
 #### Marts Layer
-The data marts is denormalised and aimed at answering business questions.
+The models in the marts layer produce denormalised tables to be queried by the analysts.
+The aim is to format and present the data in a way that analysts can answer business questions
+with simple queries.
+
+For each table, I merge the rides and weather tables from the core layer, and aggregate the data in various ways.
 
 ### Orchestration
 #### Incremental Model
@@ -69,6 +73,73 @@ and automatically process the next one in the sequence.
 
 This way the entire dataset is not entirely reprocessed each time, which saves compute costs and increases performance of our pipeline.
 While this isn’t necessary for the small dataset used in this project, it would be important when processing years worth of bike rental data.
+
+## Views
+### daily_route_stats
+The `daily_route_stats` table provides daily ride statistics per route along with weather metrics.
+
+| daily_route_stats           |
+|-----------------------------|
+| __date__                    |
+| __start_station__           |
+| __end_station__             |
+| __ride_count__              |
+| __total_duraction_seconds__ |
+| __avg_temp_f__              |
+| __precipitation_mm__        |
+| __snowfall_mm__             |
+| __snow_depth_mm__           |
+
+
+It is aimed at answering addressing the following types of questions:
+- How does temperature affect the total number of rentals per day?
+- Is there a “sweet spot” in temperature where ridership peaks?
+- How much does precipitation (rain, snow) reduce ridership?
+- Are there thresholds (e.g., rainfall > 2 mm or temperature < 40°F) beyond which rentals drop sharply?
+- To what extent does weather affect travel speed?
+
+### daily_user_stats
+The `daily_user_stats` table computes daily ridership statistics along different groups of the customer base.
+
+| daily_user_stats            |
+|-----------------------------|
+| __date__                    |
+| __age_group__               |
+| __gender__                  |
+| __user_type__               |
+| __ride_count__              |
+| __total_duraction_seconds__ |
+| __avg_temp_f__              |
+| __precipitation_mm__        |
+| __snowfall_mm__             |
+| __snow_depth_mm__           |
+
+
+This dataset can be used as the basis for establishing different customer profiles, and answer questions such as:
+- Do casual users respond differently to weather changes than subscribers?
+- Are younger riders more likely to ride in colder or wetter weather than older ones?
+- Does gender or age group influence weather tolerance?
+
+### rides_rolling_weather
+The `rides_rolling_weather` focuses on the impact of short- and medium-term weather trends on daily bike rentals.
+For every day of data, ride statistics are given along with precipitation metrics for the preceding week and month.
+
+| rides_rolling_weather       |
+|-----------------------------|
+| __date__                    |
+| __ride_count__              |
+| __total_duraction_seconds__ |
+| __precip_days_last_7__      |
+| __total_precip_last_7__     |
+| __precip_days_last_30__     |
+| __total_precip_last_30__    |
+| __snow_days_last_7__        |
+| __total_snow_last_7__       |
+| __snow_days_last_30__       |
+| __total_snow_last_30__      |
+
+This table is aimed at capturing how weather trends impact usage, and whether precipitation should influence capacity
+planning.
 
 ## Next Steps
 The logical next step in this project is to orchestrate the data pipeline and periodically refresh the data.

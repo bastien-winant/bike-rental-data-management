@@ -1,6 +1,8 @@
 MODEL (
 	name marts.rides_rolling_weather,
-	kind VIEW,
+	kind VIEW (
+      materialized true
+    ),
 	cron "@monthly",
 	start "2016-01-01",
 	audits (
