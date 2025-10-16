@@ -22,7 +22,11 @@ WITH daily_ride_stats AS (
     GROUP BY 1, 2, 3
 )
 SELECT
-    r.*,
+    r.date,
+    ss.name AS start_station,
+    es.name AS stop_station,
+    r.ride_count,
+    r.total_duration_seconds,
     w.avg_temp_f,
     w.avg_wind_speed,
     w.precipitation_mm,
@@ -30,4 +34,8 @@ SELECT
     w.snow_depth_mm
 FROM daily_ride_stats r
 JOIN core.weather_metrics w
-ON r.date = w.date;
+ON r.date = w.date
+JOIN core.citibike_stations ss
+ON r.start_station_id = ss.id
+JOIN core.citibike_stations es
+ON r.stop_station_id = es.id;
